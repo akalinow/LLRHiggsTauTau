@@ -2457,6 +2457,7 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
 
     // L1 candidate matching -- to correct for the missing seed
     bool isL1IsoTauMatched = false;
+    /* AK: no l1extra in reHLT MC samples
     for (unsigned int iL1IsoTau = 0; iL1IsoTau < L1ExtraIsoTau->size(); iL1IsoTau++)
     {
       const l1extra::L1JetParticle& L1IsoTau = (*L1ExtraIsoTau).at(iL1IsoTau);
@@ -2468,6 +2469,7 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
         break;
       }
     }
+    */
     _daughters_isL1IsoTau28Matched.push_back(isL1IsoTauMatched) ;
 
   }

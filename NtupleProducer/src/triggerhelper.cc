@@ -112,7 +112,7 @@ Long64_t triggerhelper::FindTriggerBit(const edm::Event& event, const vector<str
   Long64_t bit =0;
   
   edm::Handle<edm::TriggerResults> triggerResults;
-  event.getByLabel(InputTag("TriggerResults","","HLT"), triggerResults);
+  event.getByLabel(InputTag("TriggerResults","","HLT2"), triggerResults);
       
   // for(int it=0;it<nTriggers;it++){
   //   for(int j=0;j<(int)triggerNames->size();j++)cout<<triggerNames->triggerName(j)<<endl;
