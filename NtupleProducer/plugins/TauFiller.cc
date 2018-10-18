@@ -13,13 +13,12 @@
 #include <FWCore/ParameterSet/interface/ParameterSet.h>
 #include <FWCore/Framework/interface/ESHandle.h>
 #include <DataFormats/PatCandidates/interface/Tau.h>
-//#include <DataFormats/TauReco/interface/PFTauDiscriminator.h>
 
-//#include "DataFormats/VertexReco/interface/Vertex.h"
+#include "RecoTauTag/RecoTau/interface/PFRecoTauClusterVariables.h"
+
 #include <LLRHiggsTauTau/NtupleProducer/interface/DaughterDataHelpers.h>
 #include <LLRHiggsTauTau/NtupleProducer/interface/CutSet.h>
 #include <LLRHiggsTauTau/NtupleProducer/interface/LeptonIsoHelper.h>
-//#include "BDTId.h"
 
 #include <vector>
 #include <string>
@@ -49,12 +48,18 @@ class TauFiller : public edm::EDProducer {
   edm::EDGetTokenT<edm::View<reco::GenParticle> > theGenTag ;
   edm::EDGetTokenT<vector<Vertex> > theVtxTag ;
   const std::string theDiscriminatorTag;
+  
   const StringCutObjectSelector<pat::Tau, true> cut;
   const CutSet<pat::Tau> flags;
-  // const std::string NominalUpOrDown;
   const double NominalTESCorrection; // value of correction of centrale TES value
   const bool ApplyTESCentralCorr; // shift the central TES value
-  // const bool ApplyTESUpDown; // compute Up/Down TES variation
+
+  std::string chargedIsoPtSumsIDName;
+  std::string neutralIsoPtSumsIDName;
+  std::string puCorrPtSumsIDName;
+  std::string photonPtSumOutsideSignalConeIDName;
+  std::string footprintCorrectionIDName;
+  TauIdMVAAuxiliaries clusterVariables;
 
   vector<string> tauIntDiscrims_; // tau discrims to be added as userInt
   vector<string> tauFloatDiscrims_; // tau discrims to be added as userFloats
@@ -68,10 +73,13 @@ TauFiller::TauFiller(const edm::ParameterSet& iConfig) :
   theDiscriminatorTag(iConfig.getParameter<std::string>("discriminator")),
   cut(iConfig.getParameter<std::string>("cut")),
   flags(iConfig.getParameter<ParameterSet>("flags")), 
-  // NominalUpOrDown(iConfig.getParameter<std::string>("NominalUpOrDown")),
   NominalTESCorrection(iConfig.getParameter<double>("NominalTESCorrection")),
-  ApplyTESCentralCorr(iConfig.getParameter<bool>("ApplyTESCentralCorr"))
-  // ApplyTESUpDown(iConfig.getParameter<bool>("ApplyTESUpDown"))
+  ApplyTESCentralCorr(iConfig.getParameter<bool>("ApplyTESCentralCorr")),
+  chargedIsoPtSumsIDName(iConfig.getParameter<std::string>("srcChargedIsoPtSum")),
+  neutralIsoPtSumsIDName(iConfig.getParameter<std::string>("srcNeutralIsoPtSum")),
+  puCorrPtSumsIDName(iConfig.getParameter<std::string>("srcPUcorrPtSum")),
+  photonPtSumOutsideSignalConeIDName(iConfig.getParameter<std::string>("srcPhotonPtSumOutsideSignalCone")),
+  footprintCorrectionIDName(iConfig.getParameter<std::string>("srcFootprintCorrection"))
 {
   produces<pat::TauCollection>();
 
@@ -282,7 +290,44 @@ TauFiller::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     int numParticlesIsoCone = l.isolationCands().size();
     float leadChargedParticlePt=l.leadCand()->pt();
     float trackRefPt = (l.leadChargedHadrCand().isNonnull() ? l.leadChargedHadrCand()->pt() : 0.);
+    
+    float chargedIsoPtSum = l.tauID(chargedIsoPtSumsIDName);
+    float neutralIsoPtSum = l.tauID(neutralIsoPtSumsIDName);
+    float puCorrPtSum     = l.tauID(puCorrPtSumsIDName);
+    float photonPtSumOutsideSignalCone = l.tauID(photonPtSumOutsideSignalConeIDName);
+    //float footprintCorrection = l.tauID(footprintCorrectionIDName);
+    
+    float decayDistX = l.flightLength().x();
+    float decayDistY = l.flightLength().y();
+    float decayDistZ = l.flightLength().z();
+    float decayDistMag = std::sqrt(decayDistX*decayDistX + decayDistY*decayDistY + decayDistZ*decayDistZ);
 
+    // --- The following 5 variables differ slightly between AOD & MiniAOD
+    //     because they are recomputed using packedCandidates saved in the tau
+    int tauDecayMode = l.decayMode();
+    float nPhoton = clusterVariables.tau_n_photons_total(l);
+    float ptWeightedDetaStrip = clusterVariables.tau_pt_weighted_deta_strip(l, tauDecayMode);
+    float ptWeightedDphiStrip = clusterVariables.tau_pt_weighted_dphi_strip(l, tauDecayMode);
+    float ptWeightedDrSignal = clusterVariables.tau_pt_weighted_dr_signal(l, tauDecayMode);
+    float ptWeightedDrIsolation = clusterVariables.tau_pt_weighted_dr_iso(l, tauDecayMode);
+    // ---
+    float leadingTrackChi2 = l.leadingTrackNormChi2();
+    float eRatio = clusterVariables.tau_Eratio(l);
+
+    // Difference between measured and maximally allowed Gottfried-Jackson angle
+    float gjAngleDiff = -999;
+    if ( tauDecayMode == 10 ) {
+        double mTau = 1.77682;
+        double mAOne = l.p4().M();
+        double pAOneMag = l.p();
+        double argumentThetaGJmax = (std::pow(mTau,2) - std::pow(mAOne,2) ) / ( 2 * mTau * pAOneMag );
+        double argumentThetaGJmeasured = ( l.p4().px() * decayDistX + l.p4().py() * decayDistY + l.p4().pz() * decayDistZ ) / ( pAOneMag * decayDistMag );
+        if ( std::abs(argumentThetaGJmax) <= 1. && std::abs(argumentThetaGJmeasured) <= 1. ) {
+            double thetaGJmax = std::asin( argumentThetaGJmax );
+            double thetaGJmeasured = std::acos( argumentThetaGJmeasured );
+            gjAngleDiff = thetaGJmeasured - thetaGJmax;
+        }
+    }
     
     //Decay mode
     //int decayMode = -1;
@@ -340,8 +385,26 @@ TauFiller::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     l.addUserInt("numPhotonsIsoCone",numPhotonsIsoCone);
     l.addUserInt("numParticlesIsoCone",numParticlesIsoCone);
     l.addUserFloat("leadChargedParticlePt",leadChargedParticlePt);
-    l.addUserFloat("trackRefPt",trackRefPt); 
+    l.addUserFloat("trackRefPt",trackRefPt);
 
+    l.addUserFloat("chargedIsoPtSum",chargedIsoPtSum);
+    l.addUserFloat("neutralIsoPtSum",neutralIsoPtSum);
+    l.addUserFloat("puCorrPtSum",puCorrPtSum);
+    l.addUserFloat("photonPtSumOutsideSignalCone",photonPtSumOutsideSignalCone);
+    l.addUserFloat("nPhoton",nPhoton);
+
+    l.addUserFloat("ptWeightedDetaStrip",ptWeightedDetaStrip);
+    l.addUserFloat("ptWeightedDphiStrip",ptWeightedDphiStrip);
+    l.addUserFloat("ptWeightedDrSignal",ptWeightedDrSignal);
+    l.addUserFloat("ptWeightedDrIsolation",ptWeightedDrIsolation);
+    l.addUserFloat("eRatio",eRatio);
+    l.addUserFloat("dxy_Sig",l.dxy_Sig());
+    l.addUserFloat("ip3d",l.ip3d());
+    l.addUserInt("ip3d",l.hasSecondaryVertex());
+    l.addUserInt("decayDistMag",decayDistMag);
+    l.addUserInt("flightLengthSig",l.flightLengthSig());
+    l.addUserInt("gjAngleDiff",gjAngleDiff);
+    
     // fill all userfloats
     for (unsigned int iuf = 0; iuf < tauFloatDiscrims_.size(); iuf++)
     {
