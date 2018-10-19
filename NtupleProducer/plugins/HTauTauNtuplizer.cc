@@ -451,17 +451,10 @@ class HTauTauNtuplizer : public edm::EDAnalyzer {
 
   std::vector<Double_t> _daughters_againstElectronMVA5category;
   std::vector<Double_t> _daughters_againstElectronMVA5raw;
-  //std::vector<Double_t> _daughters_byPileupWeightedIsolationRaw3Hits;
-  //std::vector<Double_t> _daughters_footprintCorrection;
-  //std::vector<Double_t> _daughters_neutralIsoPtSumWeight;
   std::vector<Double_t> _daughters_photonPtSumOutsideSignalCone;
 
   std::vector<Int_t> _daughters_decayModeFindingNewDMs;
   std::vector<Double_t> _daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits;
-  //std::vector<Double_t> _daughters_byIsolationMVA3oldDMwoLTraw;
-  //std::vector<Double_t> _daughters_byIsolationMVA3oldDMwLTraw;
-  //std::vector<Double_t> _daughters_byIsolationMVA3newDMwoLTraw;
-  //std::vector<Double_t> _daughters_byIsolationMVA3newDMwLTraw;
   std::vector<Double_t> _daughters_byIsolationMVArun2v1DBoldDMwLTraw;
   std::vector<Double_t> _daughters_byIsolationMVArun2v1DBoldDMwLTraw2017v2;
   std::vector<Double_t> _daughters_byIsolationMVArun2v1DBnewDMwLTraw2017v2;
@@ -485,6 +478,21 @@ class HTauTauNtuplizer : public edm::EDAnalyzer {
   std::vector<Int_t> _daughters_numParticlesIsoCone;
   std::vector<Double_t> _daughters_leadChargedParticlePt;
   std::vector<Double_t> _daughters_trackRefPt;
+
+  std::vector<Int_t> _daughters_nPhoton;
+  std::vector<Double_t> _daughters_ptWeightedDetaStrip;
+  std::vector<Double_t> _daughters_ptWeightedDphiStrip;
+  std::vector<Double_t> _daughters_ptWeightedDrSignal;
+  std::vector<Double_t> _daughters_ptWeightedDrIsolation;
+  std::vector<Double_t> _daughters_eRatio;
+  std::vector<Double_t> _daughters_dxy_Sig;
+  std::vector<Double_t> _daughters_ip3d;
+  std::vector<Double_t> _daughters_ip3d_Sig;
+  std::vector<Int_t> _daughters_hasSecondaryVertex;
+  std::vector<Double_t> _daughters_decayDistMag;
+  std::vector<Double_t> _daughters_flightLengthSig;
+  std::vector<Double_t> _daughters_gjAngleDiff;
+  
   std::vector<Int_t> _daughters_LFtrigger;
   std::vector<Int_t> _daughters_L3trigger;
   std::vector<Long64_t> _daughters_trgMatched;
@@ -736,9 +744,6 @@ void HTauTauNtuplizer::Initialize(){
   _daughters_decayModeFindingOldDMs.clear();
   _daughters_decayModeFindingNewDMs.clear();
   _daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits.clear();
-  //_daughters_byIsolationMVA3oldDMwoLTraw.clear();
-  //_daughters_byIsolationMVA3oldDMwLTraw.clear();
-  //_daughters_byIsolationMVA3newDMwoLTraw.clear();
   _daughters_byIsolationMVArun2v1DBoldDMwLTraw.clear();
   _daughters_byIsolationMVArun2v1DBoldDMwLTraw2017v2.clear();
   _daughters_byIsolationMVArun2v1DBnewDMwLTraw2017v2.clear();
@@ -752,12 +757,8 @@ void HTauTauNtuplizer::Initialize(){
 
   _daughters_againstElectronMVA5category.clear();
   _daughters_againstElectronMVA5raw.clear();
-  //_daughters_byPileupWeightedIsolationRaw3Hits.clear();
-  //_daughters_footprintCorrection.clear();
-  //_daughters_neutralIsoPtSumWeight.clear();
   _daughters_photonPtSumOutsideSignalCone.clear();
 
-  //_daughters_byIsolationMVA3newDMwLTraw.clear();
   _daughters_chargedIsoPtSum.clear();
   _daughters_neutralIsoPtSum.clear();
   _daughters_chargedIsoPtSumdR03.clear();
@@ -773,6 +774,21 @@ void HTauTauNtuplizer::Initialize(){
   _daughters_numParticlesIsoCone.clear();
   _daughters_leadChargedParticlePt.clear();
   _daughters_trackRefPt.clear();
+
+  _daughters_nPhoton.clear();
+  _daughters_ptWeightedDetaStrip.clear();
+  _daughters_ptWeightedDphiStrip.clear();
+  _daughters_ptWeightedDrSignal.clear();
+  _daughters_ptWeightedDrIsolation.clear();
+  _daughters_eRatio.clear();
+  _daughters_dxy_Sig.clear();
+  _daughters_ip3d.clear();
+  _daughters_ip3d_Sig.clear();
+  _daughters_hasSecondaryVertex.clear();
+  _daughters_decayDistMag.clear();
+  _daughters_flightLengthSig.clear();
+  _daughters_gjAngleDiff.clear();
+      
   _daughters_LFtrigger.clear();
   _daughters_L3trigger.clear();
   _daughters_trgMatched.clear();
@@ -1169,17 +1185,10 @@ void HTauTauNtuplizer::beginJob(){
 
   myTree->Branch("againstElectronMVA5category",&_daughters_againstElectronMVA5category);
   myTree->Branch("againstElectronMVA5raw",&_daughters_againstElectronMVA5raw);
-  //myTree->Branch("byPileupWeightedIsolationRaw3Hits",&_daughters_byPileupWeightedIsolationRaw3Hits);
-  //myTree->Branch("footprintCorrection",&_daughters_footprintCorrection);
-  //myTree->Branch("neutralIsoPtSumWeight",&_daughters_neutralIsoPtSumWeight);
   myTree->Branch("photonPtSumOutsideSignalCone",&_daughters_photonPtSumOutsideSignalCone);
 
   myTree->Branch("daughters_decayModeFindingNewDMs", &_daughters_decayModeFindingNewDMs);
   myTree->Branch("daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits", &_daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits);
-  //myTree->Branch("daughters_byIsolationMVA3oldDMwoLTraw",&_daughters_byIsolationMVA3oldDMwoLTraw);
-  //myTree->Branch("daughters_byIsolationMVA3oldDMwLTraw",&_daughters_byIsolationMVA3oldDMwLTraw);
-  //myTree->Branch("daughters_byIsolationMVA3newDMwoLTraw",&_daughters_byIsolationMVA3newDMwoLTraw);
-  //myTree->Branch("daughters_byIsolationMVA3newDMwLTraw",&_daughters_byIsolationMVA3newDMwLTraw);
   myTree->Branch("daughters_byIsolationMVArun2v1DBoldDMwLTraw",&_daughters_byIsolationMVArun2v1DBoldDMwLTraw);
   myTree->Branch("daughters_byIsolationMVArun2v1DBoldDMwLTraw2017v2",&_daughters_byIsolationMVArun2v1DBoldDMwLTraw2017v2);
   myTree->Branch("daughters_byIsolationMVArun2v1DBnewDMwLTraw2017v2",&_daughters_byIsolationMVArun2v1DBnewDMwLTraw2017v2);
@@ -1206,6 +1215,21 @@ void HTauTauNtuplizer::beginJob(){
   myTree->Branch("daughters_numParticlesIsoCone", &_daughters_numParticlesIsoCone);
   myTree->Branch("daughters_leadChargedParticlePt", &_daughters_leadChargedParticlePt);
   myTree->Branch("daughters_trackRefPt", &_daughters_trackRefPt);
+
+  myTree->Branch("daughters_nPhoton", &_daughters_nPhoton);
+  myTree->Branch("daughters_ptWeightedDetaStrip", &_daughters_ptWeightedDetaStrip);
+  myTree->Branch("daughters_ptWeightedDphiStrip",&_daughters_ptWeightedDphiStrip);
+  myTree->Branch("daughters_ptWeightedDrSignal",&_daughters_ptWeightedDrSignal);
+  myTree->Branch("daughters_ptWeightedDrIsolation",&_daughters_ptWeightedDrIsolation);
+  myTree->Branch("daughters_eRatio",&_daughters_eRatio);
+  myTree->Branch("daughters_dxy_Sig",&_daughters_dxy_Sig);
+  myTree->Branch("daughters_ip3d",&_daughters_ip3d);
+  myTree->Branch("daughters_ip3d_Sig",&_daughters_ip3d_Sig);
+  myTree->Branch("daughters_hasSecondaryVertex",&_daughters_hasSecondaryVertex);
+  myTree->Branch("daughters_decayDistMag",&_daughters_decayDistMag);
+  myTree->Branch("daughters_flightLengthSig",&_daughters_flightLengthSig);
+  myTree->Branch("daughters_gjAngleDiff",&_daughters_gjAngleDiff);
+
   myTree->Branch("daughters_isLastTriggerObjectforPath", &_daughters_LFtrigger);
   myTree->Branch("daughters_trgMatched", &_daughters_trgMatched);
   myTree->Branch("daughters_isTriggerObjectforPath", &_daughters_L3trigger);
@@ -2064,27 +2088,26 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
     int numChargedParticlesSignalCone=-1, numNeutralHadronsSignalCone=-1, numPhotonsSignalCone=-1, numParticlesSignalCone=-1, numChargedParticlesIsoCone=-1, numNeutralHadronsIsoCone=-1, numPhotonsIsoCone=-1, numParticlesIsoCone=-1;
     double leadChargedParticlePt=-1., trackRefPt=-1.;
     int typeOfMuon=0;
-    double 
-    //byIsolationMVA3oldDMwoLTraw=-1, byIsolationMVA3oldDMwLTraw=-1,  byIsolationMVA3newDMwoLTraw=-1,byIsolationMVA3newDMwLTraw=-1, 
-      byIsolationMVArun2v1DBoldDMwLTraw=-1, byIsolationMVArun2v1DBoldDMwLTraw2017v2=-1, byIsolationMVArun2v1DBnewDMwLTraw2017v2=-1;
+    double byIsolationMVArun2v1DBoldDMwLTraw=-1, byIsolationMVArun2v1DBoldDMwLTraw2017v2=-1, byIsolationMVArun2v1DBnewDMwLTraw2017v2=-1;
     double
       deepTau2017v1tauVSe=-1, deepTau2017v1tauVSmu=-1, deepTau2017v1tauVSjet=-1,deepTau2017v1tauVSall=-1,
       DPFTau_2016_v0tauVSall=-1,
       DPFTau_2016_v1tauVSall=-1;
     Long64_t tauIDflag = 0;
-    double   
-      againstElectronMVA5category,
-      againstElectronMVA5raw,
-      //byPileupWeightedIsolationRaw3Hits,
-      //footprintCorrection,
-      //neutralIsoPtSumWeight,
-      photonPtSumOutsideSignalCone;
+    double againstElectronMVA5category, againstElectronMVA5raw, photonPtSumOutsideSignalCone;
 
     double dxy_innerTrack = -1., dz_innerTrack = -1., sip = -1., error_trackpt=-1.;
     int jetNDauChargedMVASel = -1;
     double miniRelIsoCharged = -1., miniRelIsoNeutral = -1.;
     double jetPtRel = -1., jetPtRatio = -1., jetBTagCSV=-1.;
     double lepMVA_mvaId = -1.;
+
+    int nPhoton;
+    double ptWeightedDetaStrip, ptWeightedDphiStrip;
+    double ptWeightedDrSignal, ptWeightedDrIsolation;
+    double eRatio, dxy_Sig, ip3d, ip3d_Sig;
+    int hasSecondaryVertex;
+    double decayDistMag, flightLengthSig, gjAngleDiff;
 
     //
     GlobalPoint aPVPoint(_pv_x, _pv_y, _pv_z);
@@ -2169,16 +2192,9 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
       }
       againstElectronMVA5category = userdatahelpers::getUserFloat (cand, "againstElectronMVA6category");//use old name for MVA6
       againstElectronMVA5raw = userdatahelpers::getUserFloat (cand, "againstElectronMVA6Raw");//use old name for MVA6
-      //byPileupWeightedIsolationRaw3Hits = userdatahelpers::getUserFloat (cand, "byPileupWeightedIsolationRaw3Hits");
-      //footprintCorrection = userdatahelpers::getUserFloat (cand, "footprintCorrection");
-      //neutralIsoPtSumWeight = userdatahelpers::getUserFloat (cand, "neutralIsoPtSumWeight");
       photonPtSumOutsideSignalCone = userdatahelpers::getUserFloat (cand, "photonPtSumOutsideSignalCone");
 
       byCombinedIsolationDeltaBetaCorrRaw3Hits = userdatahelpers::getUserFloat (cand, "byCombinedIsolationDeltaBetaCorrRaw3Hits");
-      //byIsolationMVA3oldDMwoLTraw=userdatahelpers::getUserFloat (cand, "byIsolationMVA3oldDMwoLTraw");
-      //byIsolationMVA3oldDMwLTraw=userdatahelpers::getUserFloat (cand, "byIsolationMVA3oldDMwLTraw");
-      //byIsolationMVA3newDMwoLTraw=userdatahelpers::getUserFloat (cand, "byIsolationMVA3newDMwoLTraw");
-      //byIsolationMVA3newDMwLTraw=userdatahelpers::getUserFloat (cand, "byIsolationMVA3newDMwLTraw");
       byIsolationMVArun2v1DBoldDMwLTraw=userdatahelpers::getUserFloat (cand, "byIsolationMVArun2v1DBoldDMwLTraw");
       byIsolationMVArun2v1DBoldDMwLTraw2017v2=userdatahelpers::getUserFloat (cand, "byIsolationMVArun2v1DBoldDMwLTraw2017v2");
       byIsolationMVArun2v1DBnewDMwLTraw2017v2=userdatahelpers::getUserFloat (cand, "byIsolationMVArun2v1DBnewDMwLTraw2017v2");
@@ -2204,6 +2220,20 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
       leadChargedParticlePt = userdatahelpers::getUserFloat (cand, "leadChargedParticlePt");
       trackRefPt = userdatahelpers::getUserFloat (cand, "trackRefPt");
 
+      nPhoton =  userdatahelpers::getUserFloat(cand, "nPhoton");
+      ptWeightedDetaStrip = userdatahelpers::getUserFloat(cand, "ptWeightedDetaStrip");
+      ptWeightedDphiStrip = userdatahelpers::getUserFloat(cand, "ptWeightedDphiStrip");
+      ptWeightedDrSignal = userdatahelpers::getUserFloat(cand, "ptWeightedDrSignal");
+      ptWeightedDrIsolation = userdatahelpers::getUserFloat(cand, "ptWeightedDrIsolation");
+      eRatio =  userdatahelpers::getUserFloat(cand, "eRatio");
+      dxy_Sig = userdatahelpers::getUserFloat(cand, "dxy_Sig");
+      ip3d = userdatahelpers::getUserFloat(cand, "ip3d");
+      ip3d_Sig = userdatahelpers::getUserFloat(cand, "ip3d_Sig");
+      hasSecondaryVertex =  userdatahelpers::getUserInt(cand, "hasSecondaryVertex");
+      decayDistMag = userdatahelpers::getUserFloat(cand, "decayDistMag");
+      flightLengthSig = userdatahelpers::getUserFloat(cand, "flightLengthSig");
+      gjAngleDiff = userdatahelpers::getUserFloat(cand, "gjAngleDiff");
+            
       const pat::Tau *taon  = dynamic_cast<const pat::Tau*>(cand);
       if(taon){
 	pcaPV = getPCA(event, setup, taon->leadChargedHadrCand()->bestTrack(), aPVPoint);
@@ -2226,9 +2256,6 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
     _daughters_tauID.push_back(tauIDflag);
     _daughters_againstElectronMVA5category.push_back(againstElectronMVA5category);
     _daughters_againstElectronMVA5raw.push_back(againstElectronMVA5raw);
-    //_daughters_byPileupWeightedIsolationRaw3Hits.push_back(byPileupWeightedIsolationRaw3Hits);
-    //_daughters_footprintCorrection.push_back(footprintCorrection);
-    //_daughters_neutralIsoPtSumWeight.push_back(neutralIsoPtSumWeight);
     _daughters_photonPtSumOutsideSignalCone.push_back(photonPtSumOutsideSignalCone);
 
     _daughters_charge.push_back(cand->charge());
@@ -2239,8 +2266,7 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
     _daughters_passConversionVeto.push_back(isconversionveto);
     _daughters_eleMissingHits.push_back(elemissinghits);
     _daughters_iseleChargeConsistent.push_back(iselechargeconsistent);
-
-    //_daughters_iseleCUT.push_back(userdatahelpers::getUserInt(cand,"isCUT"));
+  
     _decayType.push_back(decay);
     _daughters_IetaIeta.push_back(ieta);
     _daughters_hOverE.push_back(hOverE);
@@ -2259,11 +2285,7 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
     _daughters_neutralIsoPtSum.push_back(neutralIsoPtSum);
     _daughters_chargedIsoPtSumdR03.push_back(chargedIsoPtSumdR03);
     _daughters_neutralIsoPtSumdR03.push_back(neutralIsoPtSumdR03);
-    _daughters_puCorrPtSum.push_back(puCorrPtSum);
-    //_daughters_byIsolationMVA3oldDMwoLTraw.push_back(byIsolationMVA3oldDMwoLTraw);
-    //_daughters_byIsolationMVA3oldDMwLTraw.push_back(byIsolationMVA3oldDMwLTraw);
-    //_daughters_byIsolationMVA3newDMwoLTraw.push_back(byIsolationMVA3newDMwoLTraw);
-    //_daughters_byIsolationMVA3newDMwLTraw.push_back(byIsolationMVA3newDMwLTraw);
+    _daughters_puCorrPtSum.push_back(puCorrPtSum);   
     _daughters_byIsolationMVArun2v1DBoldDMwLTraw.push_back(byIsolationMVArun2v1DBoldDMwLTraw);
     _daughters_byIsolationMVArun2v1DBoldDMwLTraw2017v2.push_back(byIsolationMVArun2v1DBoldDMwLTraw2017v2);
     _daughters_byIsolationMVArun2v1DBnewDMwLTraw2017v2.push_back(byIsolationMVArun2v1DBnewDMwLTraw2017v2);
@@ -2288,6 +2310,20 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
     _dz_innerTrack.push_back(dz_innerTrack);
     _daughters_rel_error_trackpt.push_back(error_trackpt);
     _SIP.push_back(sip);
+
+    _daughters_nPhoton.push_back(nPhoton);
+    _daughters_ptWeightedDetaStrip.push_back(ptWeightedDetaStrip);
+    _daughters_ptWeightedDphiStrip.push_back(ptWeightedDphiStrip);
+    _daughters_ptWeightedDrSignal.push_back(ptWeightedDrSignal);
+    _daughters_ptWeightedDrIsolation.push_back(ptWeightedDrIsolation);
+    _daughters_eRatio.push_back(eRatio);
+    _daughters_dxy_Sig.push_back(dxy_Sig);
+    _daughters_ip3d.push_back(ip3d);
+    _daughters_ip3d.push_back(ip3d_Sig);
+    _daughters_hasSecondaryVertex.push_back(hasSecondaryVertex);
+    _daughters_decayDistMag.push_back(decayDistMag);
+    _daughters_flightLengthSig.push_back(flightLengthSig);
+    _daughters_gjAngleDiff.push_back(gjAngleDiff);
 
     _daughters_jetNDauChargedMVASel.push_back(jetNDauChargedMVASel);
     _daughters_miniRelIsoCharged.push_back(miniRelIsoCharged);

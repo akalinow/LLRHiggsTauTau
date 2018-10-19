@@ -369,11 +369,6 @@ process.softTaus = cms.EDProducer("TauFiller",
    discriminator = cms.string(TAUDISCRIMINATOR),
    NominalTESCorrection = cms.double(-1), #in percent , shift of central value of TES
    ApplyTESCentralCorr = cms.bool(APPLYTESCORRECTION),
-   srcChargedIsoPtSum = cms.string('chargedIsoPtSum'),
-   srcNeutralIsoPtSum = cms.string('neutralIsoPtSum'),
-   srcPUcorrPtSum = cms.string('puCorrPtSum'),
-   srcPhotonPtSumOutsideSignalCone = cms.string('photonPtSumOutsideSignalCone'),
-   srcFootprintCorrection = cms.string('footprintCorrection'), 
    flags = cms.PSet(
         isGood = cms.string("")
         )
