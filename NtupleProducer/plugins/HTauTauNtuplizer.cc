@@ -1185,7 +1185,7 @@ void HTauTauNtuplizer::beginJob(){
 
   myTree->Branch("againstElectronMVA5category",&_daughters_againstElectronMVA5category);
   myTree->Branch("againstElectronMVA5raw",&_daughters_againstElectronMVA5raw);
-  myTree->Branch("photonPtSumOutsideSignalCone",&_daughters_photonPtSumOutsideSignalCone);
+  myTree->Branch("daughters_photonPtSumOutsideSignalCone",&_daughters_photonPtSumOutsideSignalCone);
 
   myTree->Branch("daughters_decayModeFindingNewDMs", &_daughters_decayModeFindingNewDMs);
   myTree->Branch("daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits", &_daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits);
@@ -1208,7 +1208,7 @@ void HTauTauNtuplizer::beginJob(){
   myTree->Branch("daughters_numChargedParticlesSignalCone", &_daughters_numChargedParticlesSignalCone);
   myTree->Branch("daughters_numNeutralHadronsSignalCone", &_daughters_numNeutralHadronsSignalCone);
   myTree->Branch("daughters_numPhotonsSignalCone", &_daughters_numPhotonsSignalCone);
-  myTree->Branch("daughters_daughters_numParticlesSignalCone", &_daughters_numParticlesSignalCone);
+  myTree->Branch("daughters_numParticlesSignalCone", &_daughters_numParticlesSignalCone);
   myTree->Branch("daughters_numChargedParticlesIsoCone", &_daughters_numChargedParticlesIsoCone);
   myTree->Branch("daughters_numNeutralHadronsIsoCone", &_daughters_numNeutralHadronsIsoCone);
   myTree->Branch("daughters_numPhotonsIsoCone", &_daughters_numPhotonsIsoCone);
@@ -2102,12 +2102,12 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
     double jetPtRel = -1., jetPtRatio = -1., jetBTagCSV=-1.;
     double lepMVA_mvaId = -1.;
 
-    int nPhoton;
-    double ptWeightedDetaStrip, ptWeightedDphiStrip;
-    double ptWeightedDrSignal, ptWeightedDrIsolation;
-    double eRatio, dxy_Sig, ip3d, ip3d_Sig;
-    int hasSecondaryVertex;
-    double decayDistMag, flightLengthSig, gjAngleDiff;
+    int nPhoton = 0;
+    double ptWeightedDetaStrip = -1, ptWeightedDphiStrip = -1;
+    double ptWeightedDrSignal = -1, ptWeightedDrIsolation = -1;
+    double eRatio = -1, dxy_Sig = -1, ip3d = -1, ip3d_Sig = -1;
+    int hasSecondaryVertex = -1;
+    double decayDistMag = -1, flightLengthSig = -1, gjAngleDiff = -1;
 
     //
     GlobalPoint aPVPoint(_pv_x, _pv_y, _pv_z);
@@ -2220,7 +2220,7 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
       leadChargedParticlePt = userdatahelpers::getUserFloat (cand, "leadChargedParticlePt");
       trackRefPt = userdatahelpers::getUserFloat (cand, "trackRefPt");
 
-      nPhoton =  userdatahelpers::getUserFloat(cand, "nPhoton");
+      nPhoton =  userdatahelpers::getUserInt(cand, "nPhoton");
       ptWeightedDetaStrip = userdatahelpers::getUserFloat(cand, "ptWeightedDetaStrip");
       ptWeightedDphiStrip = userdatahelpers::getUserFloat(cand, "ptWeightedDphiStrip");
       ptWeightedDrSignal = userdatahelpers::getUserFloat(cand, "ptWeightedDrSignal");
@@ -2319,7 +2319,7 @@ void HTauTauNtuplizer::FillSoftLeptons(const edm::View<reco::Candidate> *daus,
     _daughters_eRatio.push_back(eRatio);
     _daughters_dxy_Sig.push_back(dxy_Sig);
     _daughters_ip3d.push_back(ip3d);
-    _daughters_ip3d.push_back(ip3d_Sig);
+    _daughters_ip3d_Sig.push_back(ip3d_Sig);
     _daughters_hasSecondaryVertex.push_back(hasSecondaryVertex);
     _daughters_decayDistMag.push_back(decayDistMag);
     _daughters_flightLengthSig.push_back(flightLengthSig);

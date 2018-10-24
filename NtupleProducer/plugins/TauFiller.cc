@@ -133,7 +133,7 @@ TauFiller::TauFiller(const edm::ParameterSet& iConfig) :
     "neutralIsoPtSumdR03",
     "puCorrPtSum",
     "photonPtSumOutsideSignalCone",
-    "footprintCorrection"
+    "footprintCorrection",
    
     "deepTau2017v1tauVSe",
     "deepTau2017v1tauVSmu",
