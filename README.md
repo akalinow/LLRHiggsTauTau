@@ -18,7 +18,7 @@ scram b -j 4
 # Clone DNN datafiles to cmssw externals (it must be done after 1st compilation)
 mkdir -p $CMSSW_BASE/external/$SCRAM_ARCH/data
 cd $CMSSW_BASE/external/$SCRAM_ARCH/data
-git clone https://github.com/cms-tau-pog/RecoTauTag-TrainingFiles -b master RecoTauTag/TrainingFiles/data
+git clone https://github.com/cms-tau-pog/RecoTauTag-TrainingFiles -b nonQuantizedDNN RecoTauTag/TrainingFiles/data
 cd -
 
 cd LLRHiggsTauTau/NtupleProducer/test/
