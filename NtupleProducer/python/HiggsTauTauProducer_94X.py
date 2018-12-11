@@ -1,6 +1,14 @@
 import FWCore.ParameterSet.Config as cms
-execfile(PyFilePath+"python/triggers_92X.py") # contains the list of triggers and filters
 
+
+if RUN_PERIOD=="Run2016":
+    execfile(PyFilePath+"python/triggers_Run2016.py")
+if RUN_PERIOD=="Run2017":
+    execfile(PyFilePath+"python/triggers_Run2017.py")
+else:
+    print("Run period:",RUN_PERIOD,"not known. Aborting.")
+    exit()
+    
 process = cms.Process("TEST")
 
 #set this cut in the cfg file
@@ -48,9 +56,11 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 if IsMC:
     print "It is MC"
     process.GlobalTag.globaltag = '94X_mc2017_realistic_v14'
+    if RUN_PERIOD=="Run2016":
+        process.GlobalTag.globaltag = '94X_mcRun2_asymptotic_v3'
 else :
     print "It is data"
-    process.GlobalTag.globaltag = '94X_dataRun2_v6'
+    process.GlobalTag.globaltag = '94X_dataRun2_v10'
 print process.GlobalTag.globaltag
 
 nanosec="25"

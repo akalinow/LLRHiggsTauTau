@@ -403,6 +403,23 @@ TauFiller::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       }
       l.addUserInt (ID.c_str(), ui);
     }
+    ////Add new machine learning working points not present in tau ID
+    ///copy from https://github.com/MRD2F/cmssw/blob/6df2f5b0adaf8a969b953faeebc892dd4e4928e2/RecoTauTag/RecoTau/python/tools/runTauIdMVA.py#L593-L649
+    std::map<string,float> newWPs;
+    newWPs["byLooseDeepTau2017v1tauVSe"] = 0.99831;
+    newWPs["byLooseDeepTau2017v1tauVSmu"] = 0.959619;
+    newWPs["byLooseDeepTau2017v1tauVSjet"] = 0.9140;
+    newWPs["byLooseDeepTau2017v1tauVSall"] = 0.5;//guess by AK
+    newWPs["byLooseDPFTau_2016_v0tauVSall"] = 0.0;
+    newWPs["byLooseDPFTau_2016_v1tauVSall"] = 0.0;
+
+    newWPs["byTightDeepTau2017v1tauVSe"] = 0.99898;
+    newWPs["byTightDeepTau2017v1tauVSmu"] = 0.999886;
+    newWPs["byTightDeepTau2017v1tauVSjet"] = 0.9635;
+    newWPs["byTightDeepTau2017v1tauVSall"] = 0.9;//guess by AK
+    newWPs["byTightDPFTau_2016_v0tauVSall"] = 0.0;
+    newWPs["byTightDPFTau_2016_v1tauVSall"] = 0.0;
+    /////////////////////////////////////////////////////////////////
 
 
     //--- MC parent code 
